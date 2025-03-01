@@ -1,6 +1,7 @@
 let lastTimeStamp = performance.now();
 
 let inputBuffer = {};
+let model = myGame.triangle;
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
@@ -106,51 +107,51 @@ function handleInputs(elapsedTime) {
     for (let input in inputBuffer) {
         if (input === 'w') {
             // Move Forward
-            translateModel(0, 0, speed, myGame.triangle);
+            translateModel(0, 0, speed, model);
         }
         else if (input === 'a') {
             // Move Left
-            translateModel(-speed, 0, 0, myGame.triangle);
+            translateModel(-speed, 0, 0, model);
         }
         else if (input === 's') {
             // Move Backward
-            translateModel(0, 0, -speed, myGame.triangle);
+            translateModel(0, 0, -speed, model);
         }
         else if (input === 'd') {
             // Move Right
-            translateModel(speed, 0, 0, myGame.triangle);
+            translateModel(speed, 0, 0, model);
         }
         else if (input === ' ') {
             // Move Up
-            translateModel(0, speed, 0, myGame.triangle);
+            translateModel(0, speed, 0, model);
         }
         else if (input === 'Shift') {
             // Move Down
-            translateModel(0, -speed, 0, myGame.triangle);
+            translateModel(0, -speed, 0, model);
         } 
         else if (input === 'ArrowLeft') {
             // Rotate Left around Z-axis
-            rotateModel(0, 0, rotationSpeed, myGame.triangle);
+            rotateModel(0, 0, rotationSpeed, model);
         }
         else if (input === 'ArrowRight') {
             // Rotate Right around Z-axis
-            rotateModel(0, 0, -rotationSpeed, myGame.triangle);
+            rotateModel(0, 0, -rotationSpeed, model);
         }
         else if (input === 'ArrowUp') {
             // Rotate Up around X-axis
-            rotateModel(rotationSpeed, 0, 0, myGame.triangle);
+            rotateModel(rotationSpeed, 0, 0, model);
         }
         else if (input === 'ArrowDown') {
             // Rotate Down around X-axis
-            rotateModel(-rotationSpeed, 0, 0, myGame.triangle);
+            rotateModel(-rotationSpeed, 0, 0, model);
         }
         else if (input === 'q') {
             // Rotate Left around Y-axis
-            rotateModel(0, rotationSpeed, 0, myGame.triangle);
+            rotateModel(0, rotationSpeed, 0, model);
         }
         else if (input === 'e') {
             // Rotate Right around Y-axis
-            rotateModel(0, -rotationSpeed, 0, myGame.triangle);
+            rotateModel(0, -rotationSpeed, 0, model);
         }
     }
 }
@@ -161,7 +162,7 @@ function update(elapsedTime) {
 
 function render(elapsedTime) {
     myGame.render.core.clearBackground();
-    myGame.render.core.drawModel(myGame.triangle);
+    myGame.render.core.drawModel(model);
 }
 
 function gameLoop(time) {
