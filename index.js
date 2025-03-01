@@ -3,8 +3,8 @@ let lastTimeStamp = performance.now();
 let inputBuffer = {};
 let model = myGame.player1;
 let model2 = myGame.player2;
-let fireSpell = myGame.fireSpell;
-let thunderSpell = myGame.thunderSpell;
+// let fireSpell = myGame.fireSpell;
+// let thunderSpell = myGame.thunderSpell;
 let ground = myGame.ground;
 let gamepadIndex = null
 
@@ -243,11 +243,11 @@ function update(elapsedTime) {
 
 function render(elapsedTime) {
     myGame.render.core.clearBackground();
-    myGame.render.core.drawModel(ground);
-    myGame.render.core.drawModel(model);
-    myGame.render.core.drawModel(model2);
-    myGame.render.core.drawModel(fireSpell);
-    myGame.render.core.drawModel(thunderSpell);
+    myGame.render.core.drawModel(ground, myGame.camera);
+    myGame.render.core.drawModel(model, myGame.camera);
+    myGame.render.core.drawModel(model2, myGame.camera);
+    // myGame.render.core.drawModel(fireSpell, myGame.camera);
+    // myGame.render.core.drawModel(thunderSpell, myGame.camera);
 }
 
 function gameLoop(time) {
@@ -292,10 +292,11 @@ function initialize() {
     myGame.render.core.resizeCanvas();
     window.addEventListener('resize', myGame.render.core.resizeCanvas);
 
-    myGame.render.core.initializeModel(model);
-    myGame.render.core.initializeModel(model2);
-    myGame.render.core.initializeModel(fireSpell);
-    myGame.render.core.initializeModel(thunderSpell);
+    myGame.render.core.initializeModel(ground, myGame.camera);
+    myGame.render.core.initializeModel(model, myGame.camera);
+    myGame.render.core.initializeModel(model2, myGame.camera);
+    // myGame.render.core.initializeModel(fireSpell, myGame.camera);
+    // myGame.render.core.initializeModel(thunderSpell, myGame.camera);
 
     requestAnimationFrame(gameLoop);
 }
