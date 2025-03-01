@@ -215,6 +215,44 @@ function handleInputs(elapsedTime) {
                 }
             }
         }
+        // Handle gamepad inputs for player 2
+        if (gamepadIndex2 !== null) {
+            let gamepad2 = navigator.getGamepads()[gamepadIndex2];
+            if (gamepad2) {
+                // Left stick controls movement
+                let leftStickX = gamepad2.axes[0];
+                let leftStickY = gamepad2.axes[1];
+
+                if (Math.abs(leftStickX) > 0.1) {
+                    translateModel(leftStickX * model2.speed, 0, 0, model2);
+                }
+                if (Math.abs(leftStickY) > 0.1) {
+                    translateModel(0, 0, leftStickY * model2.speed, model2);
+                }
+
+                // Right stick controls rotation
+                let rightStickX = gamepad2.axes[2];
+                let rightStickY = gamepad2.axes[3];
+
+                if (Math.abs(rightStickX) > 0.1) {
+                    rotateModel(0, -rightStickX * model2.rotationSpeed, 0, model2);
+                }
+                if (Math.abs(rightStickY) > 0.1) {
+                    rotateModel(rightStickY * model2.rotationSpeed, 0, 0, model2);
+                }
+
+                // up
+                if (gamepad2.buttons[0].pressed) {
+                    // Button A - Move Up
+                    translateModel(0, model2.speed, 0, model2);
+                }
+
+                // down
+                if (gamepad2.buttons[1].pressed) {
+                    translateModel(0, -model2.speed, 0, model2);
+                }
+            }
+        }
     // }
     // else {
     //     // Reset the model
