@@ -10,6 +10,7 @@ function update(elapsedTime) {
 
 function render(elapsedTime) {
     render.core.clearBackground();
+    render.core.drawTriangle();
 }
 
 function gameLoop(time) {

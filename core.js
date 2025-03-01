@@ -101,6 +101,7 @@ myGame.render.core = (function () {
     return {
         clearBackground: clearBackground,
         resizeCanvas: resizeCanvas,
+        drawTriangle: drawTriangle,
     };
 }());
 
