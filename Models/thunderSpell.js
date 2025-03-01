@@ -21,7 +21,7 @@ myGame.thunderSpell = (function () {
         vertices: [
             ...v0, ...v1, ...v2, ...v3, // Top face
             ...v4, ...v5, ...v6, ...v7  // Bottom face
-        ],
+        ],//.map(element => element * .05),
         indices: [
             0, 1, 2, 0, 2, 3, // Top face
             4, 5, 6, 4, 6, 7, // Bottom face

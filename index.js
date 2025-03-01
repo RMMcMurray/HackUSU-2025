@@ -3,11 +3,14 @@ let lastTimeStamp = performance.now();
 let inputBuffer = {};
 let model = myGame.player1;
 let model2 = myGame.player2;
-// let fireSpell = myGame.fireSpell;
-// let thunderSpell = myGame.thunderSpell;
+let fireSpell = myGame.fireSpell;
+let thunderSpell = myGame.thunderSpell;
 let ground = myGame.ground;
 let gamepadIndex1 = null;
 let gamepadIndex2 = null;
+
+let renderFireSpell = false;
+let renderThunderSpell = false;
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
@@ -178,8 +181,8 @@ function handleInputs(elapsedTime) {
             }
         }
         // Handle gamepad inputs
-        if (gamepadIndex !== null) {
-            let gamepad = navigator.getGamepads()[gamepadIndex];
+        if (gamepadIndex1 !== null) {
+            let gamepad = navigator.getGamepads()[gamepadIndex1];
             if (gamepad) {
                 // Left stick controls movement
                 let leftStickX = gamepad.axes[0];
@@ -213,6 +216,10 @@ function handleInputs(elapsedTime) {
                 if (gamepad.buttons[1].pressed) {
                     translateModel(0, -model.speed, 0, model);
                 }
+
+                if (gamepad.buttons[2].pressed) {
+                    renderFireSpell = true;
+                }
             }
         }
         // Handle gamepad inputs for player 2
@@ -227,7 +234,7 @@ function handleInputs(elapsedTime) {
                     translateModel(leftStickX * model2.speed, 0, 0, model2);
                 }
                 if (Math.abs(leftStickY) > 0.1) {
-                    translateModel(0, 0, leftStickY * model2.speed, model2);
+                    translateModel(0, 0, -leftStickY * model2.speed, model2);
                 }
 
                 // Right stick controls rotation
@@ -290,8 +297,12 @@ function render(elapsedTime) {
     myGame.render.core.drawModel(ground, myGame.camera);
     myGame.render.core.drawModel(model, myGame.camera);
     myGame.render.core.drawModel(model2, myGame.camera);
-    // myGame.render.core.drawModel(fireSpell, myGame.camera);
-    // myGame.render.core.drawModel(thunderSpell, myGame.camera);
+    if (renderFireSpell) {
+        myGame.render.core.drawModel(fireSpell, myGame.camera);
+    }
+    if (renderThunderSpell) {
+        myGame.render.core.drawModel(thunderSpell, myGame.camera);
+    }
 }
 
 function gameLoop(time) {
@@ -319,7 +330,12 @@ function initialize() {
             e.gamepad.buttons.length,
             e.gamepad.axes.length,
         );
-        gamepadIndex = e.gamepad.index
+        if (gamepadIndex1 == null) {
+            gamepadIndex1 = e.gamepad.index
+        }
+        else {
+            gamepadIndex2 = e.gamepad.index
+        }
     });
     window.addEventListener("gamepaddisconnected", (e) => {
         console.log(
@@ -327,8 +343,11 @@ function initialize() {
             e.gamepad.index,
             e.gamepad.id,
         );
-        if (gamepadIndex === e.gamepad.index) {
-            gamepadIndex = null;
+        if (gamepadIndex1 === e.gamepad.index) {
+            gamepadIndex1 = null;
+        }
+        else if (gamepadIndex2 === e.gamepad.index) {
+            gamepadIndex2 = null;
         }
     });
 
@@ -339,8 +358,8 @@ function initialize() {
     myGame.render.core.initializeModel(ground, myGame.camera);
     myGame.render.core.initializeModel(model, myGame.camera);
     myGame.render.core.initializeModel(model2, myGame.camera);
-    // myGame.render.core.initializeModel(fireSpell, myGame.camera);
-    // myGame.render.core.initializeModel(thunderSpell, myGame.camera);
+    myGame.render.core.initializeModel(fireSpell, myGame.camera);
+    myGame.render.core.initializeModel(thunderSpell, myGame.camera);
 
     requestAnimationFrame(gameLoop);
 }

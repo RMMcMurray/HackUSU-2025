@@ -142,8 +142,8 @@ myGame.player1 = (function () {
 
         // Stats for the player
         health: 100,
-        speed: 0.01,
-        rotationSpeed: 0.01,
+        speed: 0.0075,
+        rotationSpeed: 0.05,
         velocity: 0,
 
         // Hitbox for the player
