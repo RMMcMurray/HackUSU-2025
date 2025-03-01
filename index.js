@@ -4,8 +4,17 @@ function handleInputs(elapsedTime) {
 
 }
 
+// Translate the triangle
+function translateTriangle() {
+    
+}
 function update(elapsedTime) {
+    // Rotate the triangle
+    myGame.triangle.rotation[1] += 0.001;
 
+    // Translate the triangle
+    translateTriangle();
+    
 }
 
 function render(elapsedTime) {
