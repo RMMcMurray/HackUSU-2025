@@ -1,7 +1,7 @@
 let lastTimeStamp = performance.now();
 
 let inputBuffer = {};
-let model = myGame.triangle;
+let model = myGame.player2;
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
