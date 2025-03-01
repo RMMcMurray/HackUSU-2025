@@ -1,4 +1,4 @@
-
+let lastTimeStamp = performance.now();
 
 function handleInputs(elapsedTime) {
 
@@ -9,8 +9,8 @@ function update(elapsedTime) {
 }
 
 function render(elapsedTime) {
-    render.core.clearBackground();
-    render.core.drawTriangle();
+    myGame.render.core.clearBackground();
+    myGame.render.core.drawTriangle();
 }
 
 function gameLoop(time) {
@@ -22,3 +22,8 @@ function gameLoop(time) {
     render(elapsedTime);
     requestAnimationFrame(gameLoop);
 }
+
+myGame.render.core.resizeCanvas();
+window.addEventListener('resize', myGame.render.core.resizeCanvas);
+
+requestAnimationFrame(gameLoop);

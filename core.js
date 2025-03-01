@@ -113,7 +113,3 @@ myGame.render.core = (function () {
         drawTriangle: drawTriangle,
     };
 }());
-
-window.addEventListener('resize', myGame.render.core.resizeCanvas);
-myGame.render.core.resizeCanvas();
-myGame.render.core.drawTriangle();
