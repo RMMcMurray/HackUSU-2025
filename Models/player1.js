@@ -1,10 +1,11 @@
 myGame.player1 = (function () {
     // Colors for the wizard model
     let collarColor = [0.4, 0, .6]; // Dark Purple
-	let robeColor = [0.6, 0.1, 8]; // Purple
-	let brimColor = [.05, .2, .8]; // Blue
+    let robeColor = [0.6, 0.1, 0.8]; // Purple
+    let brimColor = [.05, .2, .8]; // Blue
     let hatColor = [.02, .2, .6]; // Darker Blue
     let headColor = [0, 0, 0]; // Black
+    let shotgunColor = [0.6, 0.2, 0.2]; // Brown
 
     // Function to generate vertices and indices for a cone
     function generateCone(radius, height, segments, color, yOffset, angleSpan = 2 * Math.PI) {
@@ -33,6 +34,44 @@ myGame.player1 = (function () {
         return { vertices, indices, vertexColors };
     }
 
+    // Function to generate vertices and indices for a shotgun
+    function generateShotgun(length, width, height, color, xOffset, yOffset, zOffset) {
+        let vertices = [
+            // Front face
+            xOffset, yOffset, zOffset,
+            xOffset + width, yOffset, zOffset,
+            xOffset + width, yOffset + height, zOffset,
+            xOffset, yOffset + height, zOffset,
+            // Back face
+            xOffset, yOffset, zOffset + length,
+            xOffset + width, yOffset, zOffset + length,
+            xOffset + width, yOffset + height, zOffset + length,
+            xOffset, yOffset + height, zOffset + length
+        ];
+
+        let indices = [
+            // Front face
+            0, 1, 2, 0, 2, 3,
+            // Back face
+            4, 5, 6, 4, 6, 7,
+            // Top face
+            3, 2, 6, 3, 6, 7,
+            // Bottom face
+            0, 1, 5, 0, 5, 4,
+            // Right face
+            1, 2, 6, 1, 6, 5,
+            // Left face
+            0, 3, 7, 0, 7, 4
+        ];
+
+        let vertexColors = [];
+        for (let i = 0; i < vertices.length / 3; i++) {
+            vertexColors.push(...color);
+        }
+
+        return { vertices, indices, vertexColors };
+    }
+
     // Generate hat (cone with brim)
     let hat = generateCone(0.11, 0.5, 32, hatColor, .525);
     let brim = generateCone(0.2, 0.05, 32, brimColor, .5);
@@ -46,13 +85,17 @@ myGame.player1 = (function () {
     // Generate collar (partial cone)
     let collar = generateCone(0.15, -0.5, 32, collarColor, 0.5, 6 * Math.PI / 4);
 
+    // Generate shotgun
+    let shotgun = generateShotgun(.01, 0.01, 1, shotgunColor, 0.2, -.5, -0.15);
+
     // Combine all vertices
     let allVertices = [
         ...hat.vertices,
         ...brim.vertices,
         ...head.vertices,
         ...robe.vertices,
-        ...collar.vertices
+        ...collar.vertices,
+        ...shotgun.vertices
     ];
 
     // Calculate hitbox (bounding box)
@@ -85,14 +128,16 @@ myGame.player1 = (function () {
             ...brim.indices.map(index => index + hat.vertices.length / 3),
             ...head.indices.map(index => index + (hat.vertices.length + brim.vertices.length) / 3),
             ...robe.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length) / 3),
-            ...collar.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length) / 3)
+            ...collar.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length) / 3),
+            ...shotgun.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length + collar.vertices.length) / 3)
         ],
         vertexColors: [
             ...hat.vertexColors,
             ...brim.vertexColors,
             ...head.vertexColors,
             ...robe.vertexColors,
-            ...collar.vertexColors
+            ...collar.vertexColors,
+            ...shotgun.vertexColors
         ],
 
         // Stats for the player

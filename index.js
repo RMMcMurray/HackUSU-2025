@@ -2,12 +2,9 @@ let lastTimeStamp = performance.now();
 
 let inputBuffer = {};
 let model = myGame.player1;
-<<<<<<< Updated upstream
-=======
 let model2 = myGame.player2;
 let fireSpell = myGame.fireSpell;
 let thunderSpell = myGame.thunderSpell;
->>>>>>> Stashed changes
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
