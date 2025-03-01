@@ -44,15 +44,40 @@ myGame.player2 = (function () {
     // Generate collar (partial cone)
     let collar = generateCone(0.15, -0.5, 32, robeColor, 0.5, 6 * Math.PI / 4);
 
+    // Combine all vertices
+    let allVertices = [
+        ...hat.vertices,
+        ...brim.vertices,
+        ...head.vertices,
+        ...robe.vertices,
+        ...collar.vertices
+    ];
+
+    // Calculate hitbox (bounding box)
+    let minX = Infinity, minY = Infinity, minZ = Infinity;
+    let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+
+    for (let i = 0; i < allVertices.length; i += 3) {
+        let x = allVertices[i];
+        let y = allVertices[i + 1];
+        let z = allVertices[i + 2];
+
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (z < minZ) minZ = z;
+
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+        if (z > maxZ) maxZ = z;
+    }
+
+    let hitbox = {
+        minX, minY, minZ,
+        maxX, maxY, maxZ
+    };
 
     let that = {
-        vertices: [
-            ...hat.vertices,
-            ...brim.vertices,
-            ...head.vertices,
-            ...robe.vertices,
-            ...collar.vertices
-        ],
+        vertices: allVertices,
         indices: [
             ...hat.indices,
             ...brim.indices.map(index => index + hat.vertices.length / 3),
@@ -71,7 +96,10 @@ myGame.player2 = (function () {
         // Stats for the player
         health: 100,
         speed: 0.01,
-        rotationSpeed: 0.01
+        rotationSpeed: 0.01,
+
+        // Hitbox for the player
+        hitbox
     };
 
     return that;

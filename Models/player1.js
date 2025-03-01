@@ -45,47 +45,62 @@ myGame.player1 = (function () {
     // Generate collar (partial cone)
     let collar = generateCone(0.15, -0.5, 32, robeColor, 0.5, 6 * Math.PI / 4);
 
-    // Generate arms (two small cones)
-    let leftArm = generateCone(0.05, 0.3, 32, robeColor, 0);
-    let rightArm = generateCone(0.05, 0.3, 32, robeColor, 0);
+    // Combine all vertices
+    let allVertices = [
+        ...hat.vertices,
+        ...brim.vertices,
+        ...head.vertices,
+        ...robe.vertices,
+        ...collar.vertices
+    ];
 
-    // Offset the arms to the sides
-    leftArm.vertices = leftArm.vertices.map((v, i) => i % 3 === 0 ? v - 0.2 : v); // Move left arm to the left
-    rightArm.vertices = rightArm.vertices.map((v, i) => i % 3 === 0 ? v + 0.2 : v); // Move right arm to the right
+    // Calculate hitbox (bounding box)
+    let minX = Infinity, minY = Infinity, minZ = Infinity;
+    let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+
+    for (let i = 0; i < allVertices.length; i += 3) {
+        let x = allVertices[i];
+        let y = allVertices[i + 1];
+        let z = allVertices[i + 2];
+
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (z < minZ) minZ = z;
+
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+        if (z > maxZ) maxZ = z;
+    }
+
+    let hitbox = {
+        minX, minY, minZ,
+        maxX, maxY, maxZ
+    };
 
     let that = {
-        vertices: [
-            ...hat.vertices,
-            ...brim.vertices,
-            ...head.vertices,
-            ...robe.vertices,
-            ...collar.vertices,
-            ...leftArm.vertices,
-            ...rightArm.vertices
-        ],
+        vertices: allVertices,
         indices: [
             ...hat.indices,
             ...brim.indices.map(index => index + hat.vertices.length / 3),
             ...head.indices.map(index => index + (hat.vertices.length + brim.vertices.length) / 3),
             ...robe.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length) / 3),
-            ...collar.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length) / 3),
-            ...leftArm.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length + collar.vertices.length) / 3),
-            ...rightArm.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length + collar.vertices.length + leftArm.vertices.length) / 3)
+            ...collar.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length) / 3)
         ],
         vertexColors: [
             ...hat.vertexColors,
             ...brim.vertexColors,
             ...head.vertexColors,
             ...robe.vertexColors,
-            ...collar.vertexColors,
-            ...leftArm.vertexColors,
-            ...rightArm.vertexColors
+            ...collar.vertexColors
         ],
 
         // Stats for the player
         health: 100,
         speed: 0.01,
-        rotationSpeed: 0.01
+        rotationSpeed: 0.01,
+
+        // Hitbox for the player
+        hitbox
     };
 
     return that;
