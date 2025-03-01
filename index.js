@@ -104,75 +104,78 @@ function rotateModel(angleX, angleY, angleZ, model) {
 
 // Handles the inputs
 function handleInputs(elapsedTime) {
-    // Conditional to detect key presses
-    for (let input in inputBuffer) {
-        if (input === 'w') {
-            // Move Forward
-            translateModel(0, 0, model.speed, model);
-        }
-        else if (input === 'a') {
-            // Move Left
-            translateModel(-model.speed, 0, 0, model);
-        }
-        else if (input === 's') {
-            // Move Backward
-            translateModel(0, 0, -model.speed, model);
-        }
-        else if (input === 'd') {
-            // Move Right
-            translateModel(model.speed, 0, 0, model);
-        }
-        else if (input === ' ') {
-            // Move Up
-            translateModel(0, model.speed, 0, model);
-        }
-        else if (input === 'Shift') {
-            // Move Down
-            translateModel(0, -model.speed, 0, model);
-        }
-        else if (input === 'ArrowLeft') {
-            // Rotate Left around Z-axis
-            rotateModel(0, 0, model.rotationSpeed, model);
-        }
-        else if (input === 'ArrowRight') {
-            // Rotate Right around Z-axis
-            rotateModel(0, 0, -model.rotationSpeed, model);
-        }
-        else if (input === 'ArrowUp') {
-            // Rotate Up around X-axis
-            rotateModel(model.rotationSpeed, 0, 0, model);
-        }
-        else if (input === 'ArrowDown') {
-            // Rotate Down around X-axis
-            rotateModel(-model.rotationSpeed, 0, 0, model);
-        }
-        else if (input === 'q') {
-            // Rotate Left around Y-axis
-            rotateModel(0, model.rotationSpeed, 0, model);
-        }
-        else if (input === 'e') {
-            // Rotate Right around Y-axis
-            rotateModel(0, -model.rotationSpeed, 0, model);
-        }
+    if (((-.95 < calculateCenter(model.vertices).x) && (calculateCenter(model.vertices).x < .95)) &&
+        ((-.95 < calculateCenter(model.vertices).y) && (calculateCenter(model.vertices) < .95)) &&
+        ((-.95 < calculateCenter(model.vertices).z) && (calculateCenter(model.vertices).z < .95))) {
+        // Conditional to detect key presses
+        for (let input in inputBuffer) {
+            if (input === 'w') {
+                // Move Forward
+                translateModel(0, 0, model.speed, model);
+            }
+            else if (input === 'a') {
+                // Move Left
+                translateModel(-model.speed, 0, 0, model);
+            }
+            else if (input === 's') {
+                // Move Backward
+                translateModel(0, 0, -model.speed, model);
+            }
+            else if (input === 'd') {
+                // Move Right
+                translateModel(model.speed, 0, 0, model);
+            }
+            else if (input === ' ') {
+                // Move Up
+                translateModel(0, model.speed, 0, model);
+            }
+            else if (input === 'Shift') {
+                // Move Down
+                translateModel(0, -model.speed, 0, model);
+            }
+            else if (input === 'ArrowLeft') {
+                // Rotate Left around Z-axis
+                rotateModel(0, 0, model.rotationSpeed, model);
+            }
+            else if (input === 'ArrowRight') {
+                // Rotate Right around Z-axis
+                rotateModel(0, 0, -model.rotationSpeed, model);
+            }
+            else if (input === 'ArrowUp') {
+                // Rotate Up around X-axis
+                rotateModel(model.rotationSpeed, 0, 0, model);
+            }
+            else if (input === 'ArrowDown') {
+                // Rotate Down around X-axis
+                rotateModel(-model.rotationSpeed, 0, 0, model);
+            }
+            else if (input === 'q') {
+                // Rotate Left around Y-axis
+                rotateModel(0, model.rotationSpeed, 0, model);
+            }
+            else if (input === 'e') {
+                // Rotate Right around Y-axis
+                rotateModel(0, -model.rotationSpeed, 0, model);
+            }
 
 
-        if (input === 'i') {
-            // Move Forward
-            translateModel(0, 0, model2.speed, model2);
+            if (input === 'i') {
+                // Move Forward
+                translateModel(0, 0, model2.speed, model2);
+            }
+            else if (input === 'j') {
+                // Move Left
+                translateModel(-model2.speed, 0, 0, model2);
+            }
+            else if (input === 'k') {
+                // Move Backward
+                translateModel(0, 0, -model2.speed, model2);
+            }
+            else if (input === 'l') {
+                // Move Right
+                translateModel(model2.speed, 0, 0, model2);
+            }
         }
-        else if (input === 'j') {
-            // Move Left
-            translateModel(-model2.speed, 0, 0, model2);
-        }
-        else if (input === 'k') {
-            // Move Backward
-            translateModel(0, 0, -model2.speed, model2);
-        }
-        else if (input === 'l') {
-            // Move Right
-            translateModel(model2.speed, 0, 0, model2);
-        }
-    }
         // Handle gamepad inputs
         if (gamepadIndex !== null) {
             let gamepad = navigator.getGamepads()[gamepadIndex];
@@ -207,6 +210,12 @@ function handleInputs(elapsedTime) {
                 }
             }
         }
+    }
+    else {
+        // Reset the model
+        model.health += -10;
+        model.translateModel(-calculateCenter(model.vertices));
+    }
     
 }
 
