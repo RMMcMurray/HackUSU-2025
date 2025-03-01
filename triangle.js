@@ -9,7 +9,7 @@ myGame.triangle = (function (input) {
         indices: [
             0, 1, 2
         ],
-        vetexColors: [
+        vertexColors: [
             1, 0, 0,
             0, 1, 0,
             0, 0, 1
@@ -32,13 +32,12 @@ myGame.triangle = (function (input) {
         out vec4 outColor;
 
         void main() {
-            gl_FragColor = vec4(vColor, 1.0);
+            outColor = vec4(vColor, 1.0);
         }
         `
 
-
+        
     };
-
     
-
+    return that;
 }(myGame.triangle.input));

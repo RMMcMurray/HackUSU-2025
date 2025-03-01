@@ -16,7 +16,7 @@ myGame.render.core = (function () {
     }
 
     // Initializes the buffers for the triangle
-    function initilizeBuffersTriangle() {
+    function initializeBuffersTriangle() {
         // Triangle Vertex Buffer
         let vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -32,7 +32,7 @@ myGame.render.core = (function () {
         // Triangle Color Buffer
         let colorBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(myGame.triangle.vetexColors), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(myGame.triangle.vertexColors), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
         return {
@@ -43,22 +43,34 @@ myGame.render.core = (function () {
     };
 
     // Initializes the shaders for the triangle
-    function initilizeShadersTriangle() {
+    function initializeShadersTriangle() {
         // Vertex Shader
         let vertexShader = gl.createShader(gl.VERTEX_SHADER);
         gl.shaderSource(vertexShader, myGame.triangle.vertexShaderSource);
         gl.compileShader(vertexShader);
+        if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+            console.error('Vertex shader compilation error:', gl.getShaderInfoLog(vertexShader));
+            return null;
+        }
 
         // Fragment Shader
         let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
         gl.shaderSource(fragmentShader, myGame.triangle.fragmentShaderSource);
         gl.compileShader(fragmentShader);
+        if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+            console.error('Fragment shader compilation error:', gl.getShaderInfoLog(fragmentShader));
+            return null;
+        }
 
         // Shader Program
         let shaderProgram = gl.createProgram();
         gl.attachShader(shaderProgram, vertexShader);
         gl.attachShader(shaderProgram, fragmentShader);
         gl.linkProgram(shaderProgram);
+        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            console.error('Shader program linking error:', gl.getProgramInfoLog(shaderProgram));
+            return null;
+        }
         gl.useProgram(shaderProgram);
 
         return {
@@ -70,26 +82,26 @@ myGame.render.core = (function () {
 
     // Associates the buffers with the shaders
     let associateBuffersWithShadersTriangle = function (vertexBuffer, indexBuffer, colorBuffer, shaderProgram) {
-        // Binds the buffers
+        // Creates buffer the coordinates attribute
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-
-        // Creates the coordinates attribute
         let coordinates = gl.getAttribLocation(shaderProgram, 'aCoordinates');
         gl.vertexAttribPointer(coordinates, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(coordinates);
 
-        // Creates the color attribute
+        // Creates buffer the color attribute
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         let color = gl.getAttribLocation(shaderProgram, 'aColor');
         gl.vertexAttribPointer(color, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(color);
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     };
 
     // Draws the triangle
     function drawTriangle() {
-        let buffers = initilizeBuffersTriangle();
-        let shaders = initilizeShadersTriangle();
+        let buffers = initializeBuffersTriangle();
+        let shaders = initializeShadersTriangle();
+        if (!shaders) return; // Exit if shader initialization failed
         associateBuffersWithShadersTriangle(buffers.vertexBuffer, buffers.indexBuffer, buffers.colorBuffer, shaders.shaderProgram);
         clearBackground();
         gl.drawElements(gl.TRIANGLES, myGame.triangle.indices.length, gl.UNSIGNED_SHORT, 0);
@@ -106,5 +118,5 @@ myGame.render.core = (function () {
 }());
 
 window.addEventListener('resize', myGame.render.core.resizeCanvas);
-
 myGame.render.core.resizeCanvas();
+myGame.render.core.drawTriangle();
