@@ -15,54 +15,42 @@ myGame.render.core = (function () {
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
 
-    // Initializes the buffers for the triangle
-    function initializeBuffersTriangle() {
-        // Triangle Vertex Buffer
-        let vertexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(myGame.triangle.vertices), gl.STATIC_DRAW);
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    function initializeBuffer(bufferType, data) {
+        let buffer = gl.createBuffer();
+        gl.bindBuffer(bufferType, buffer);
+        gl.bufferData(bufferType, data, gl.STATIC_DRAW);
+        gl.bindBuffer(bufferType, null);
+        return buffer;
+    }
 
-        // Triangle Index Buffer
-        let indexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(myGame.triangle.indices), gl.STATIC_DRAW);
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-
-        // Triangle Color Buffer
-        let colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(myGame.triangle.vertexColors), gl.STATIC_DRAW);
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    function initializeBuffers(model) {
+        let vertexBuffer = initializeBuffer(gl.ARRAY_BUFFER, new Float32Array(model.vertices));
+        let indexBuffer = initializeBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(model.indices));
+        let colorBuffer = initializeBuffer(gl.ARRAY_BUFFER, new Float32Array(model.vertexColors));
 
         return {
             vertexBuffer: vertexBuffer,
             indexBuffer: indexBuffer,
             colorBuffer: colorBuffer
         };
-    };
+    }
 
-    // Initializes the shaders for the triangle
-    function initializeShadersTriangle() {
-        // Vertex Shader
-        let vertexShader = gl.createShader(gl.VERTEX_SHADER);
-        gl.shaderSource(vertexShader, myGame.triangle.vertexShaderSource);
-        gl.compileShader(vertexShader);
-        if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-            console.error('Vertex shader compilation error:', gl.getShaderInfoLog(vertexShader));
+    function initializeShader(type, source) {
+        let shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
             return null;
         }
 
-        // Fragment Shader
-        let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(fragmentShader, myGame.triangle.fragmentShaderSource);
-        gl.compileShader(fragmentShader);
-        if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-            console.error('Fragment shader compilation error:', gl.getShaderInfoLog(fragmentShader));
-            return null;
-        }
+        return shader;
+    }
 
-        // Shader Program
+    function initializeShaderProgram(vertexShaderSource, fragmentShaderSource) {
+        let vertexShader = initializeShader(gl.VERTEX_SHADER, vertexShaderSource);
+        let fragmentShader = initializeShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+
         let shaderProgram = gl.createProgram();
         gl.attachShader(shaderProgram, vertexShader);
         gl.attachShader(shaderProgram, fragmentShader);
@@ -73,43 +61,46 @@ myGame.render.core = (function () {
         }
         gl.useProgram(shaderProgram);
 
-        return {
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader,
-            shaderProgram: shaderProgram
-        };
-    };
+        return shaderProgram;
+    }
+
+    function getAttributeLocation(shaderProgram, attributeName) {
+        return gl.getAttribLocation(shaderProgram, attributeName);
+    }
+
+    function getUniformLocation(shaderProgram, uniformName) {
+        return gl.getUniformLocation(shaderProgram, uniformName);
+    }
 
     // Associates the buffers with the shaders
-    let associateBuffersWithShadersTriangle = function (vertexBuffer, indexBuffer, colorBuffer, shaderProgram) {
+    let associateBuffersWithShaderProgram = function (buffers, shaderProgram) {
         // Creates buffer the coordinates attribute
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-        let coordinates = gl.getAttribLocation(shaderProgram, 'aCoordinates');
-        gl.vertexAttribPointer(coordinates, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(coordinates);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
+        gl.vertexAttribPointer(shaderProgram.attributeLocations.position, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(shaderProgram.attributeLocations.position);
 
         // Creates buffer the color attribute
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-        let color = gl.getAttribLocation(shaderProgram, 'aColor');
-        gl.vertexAttribPointer(color, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(color);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.colorBuffer);
+        gl.vertexAttribPointer(shaderProgram.attributeLocations.color, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(shaderProgram.attributeLocations.color);
 
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer);
     };
 
     // Draws the triangle
-    function drawModel() {
-        let buffers = initializeBuffersTriangle();
-        let shaders = initializeShadersTriangle();
-        if (!shaders) return; // Exit if shader initialization failed
-        associateBuffersWithShadersTriangle(buffers.vertexBuffer, buffers.indexBuffer, buffers.colorBuffer, shaders.shaderProgram);
+    function drawModel(model) {
+        let buffers = initializeBuffers(model);
+        associateBuffersWithShaderProgram(buffers, myGame.render.shaderProgram);
         clearBackground();
-        gl.drawElements(gl.TRIANGLES, myGame.triangle.indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLES, model.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 
     return {
+        initializeShaderProgram: initializeShaderProgram,
+        getAttributeLocation: getAttributeLocation,
+        getUniformLocation: getUniformLocation,
         clearBackground: clearBackground,
         resizeCanvas: resizeCanvas,
-        drawTriangle: drawTriangle,
+        drawModel: drawModel,
     };
 }());
