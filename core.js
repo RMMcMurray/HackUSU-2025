@@ -10,6 +10,7 @@ myGame.render.core = (function () {
 
     function clearBackground() {
         gl.clearColor(.82, .70, .55, 1.0);
+        gl.enable(gl.DEPTH_TEST);)
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
@@ -33,6 +34,12 @@ myGame.render.core = (function () {
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(myGame.triangle.vetexColors), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+        return {
+            vertexBuffer: vertexBuffer,
+            indexBuffer: indexBuffer,
+            colorBuffer: colorBuffer
+        };
     };
 
     // Initializes the shaders for the triangle
@@ -53,8 +60,40 @@ myGame.render.core = (function () {
         gl.attachShader(shaderProgram, fragmentShader);
         gl.linkProgram(shaderProgram);
         gl.useProgram(shaderProgram);
+
+        return {
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            shaderProgram: shaderProgram
+        };
     };
 
+    // Associates the buffers with the shaders
+    let associateBuffersWithShadersTriangle = function (vertexBuffer, indexBuffer, colorBuffer, shaderProgram) {
+        // Binds the buffers
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+        // Creates the coordinates attribute
+        let coordinates = gl.getAttribLocation(shaderProgram, 'aCoordinates');
+        gl.vertexAttribPointer(coordinates, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(coordinates);
+
+        // Creates the color attribute
+        let color = gl.getAttribLocation(shaderProgram, 'aColor');
+        gl.vertexAttribPointer(color, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(color);
+    };
+
+    // Draws the triangle
+    function drawTriangle() {
+        let buffers = initilizeBuffersTriangle();
+        let shaders = initilizeShadersTriangle();
+        associateBuffersWithShadersTriangle(buffers.vertexBuffer, buffers.indexBuffer, buffers.colorBuffer, shaders.shaderProgram);
+        clearBackground();
+        gl.drawElements(gl.TRIANGLES, myGame.triangle.indices.length, gl.UNSIGNED_SHORT, 0);
+    }
 
 
 
