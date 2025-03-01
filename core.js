@@ -98,7 +98,7 @@ myGame.render.core = (function () {
     };
 
     // Draws the triangle
-    function drawTriangle() {
+    function drawModel() {
         let buffers = initializeBuffersTriangle();
         let shaders = initializeShadersTriangle();
         if (!shaders) return; // Exit if shader initialization failed
