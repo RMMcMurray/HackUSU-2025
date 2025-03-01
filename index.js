@@ -242,16 +242,10 @@ function handleInputs(elapsedTime) {
                 let rightStickY = gamepad2.axes[3];
 
                 if (Math.abs(rightStickX) > 0.1) {
-                    translateModel(-rightStickX * fireSpell.speed,0, 0, fireSpell);
+                    rotateModel(0, -rightStickX * model2.rotationSpeed, 0, model2);
                 }
                 if (Math.abs(rightStickY) > 0.1) {
-                    translateModel(0, 0, -rightStickY * fireSpell.speed, 0, 0, fireSpell);
-                }
-                if (gamepad2.buttons[11].pressed) {
-                    translateModel(0, fireSpell.speed, 0, fireSpell);
-                })
-                if (gamepad2.buttons[12].pressed) {
-                    translateModel(0, -fireSpell.speed, 0, fireSpell);
+                    rotateModel(rightStickY * model2.rotationSpeed, 0, 0, model2);
                 }
 
                 // up
