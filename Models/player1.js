@@ -1,141 +1,73 @@
 myGame.player1 = (function () {
+
     // Colors for the wizard model
-    let hat = [0.5, 0, 0.5]; // Purple
-    let body = [0, 0, 1]; // Blue
-    let base = [0.5, 0.25, 0]; // Brown
+    let hatColor = [0.5, 0, 0.5]; // Purple
+    let robeColor = [0, 0, 1]; // Blue
+    let headColor = [0, 0, 0]; // Black
 
-    // Number of segments for the rounder hat and brim
-    let hatSegments = 16;
-    let hatVertices = [];
-    let hatIndices = [];
-    let hatColors = [];
+    // Function to generate vertices and indices for a cone
+    function generateCone(radius, height, segments, color, yOffset, angleSpan = 2 * Math.PI) {
+        let vertices = [];
+        let indices = [];
+        let vertexColors = [];
 
-    // Top point of the hat
-    hatVertices.push(0, 1, 0);
-    hatColors.push(...hat);
+        // Tip of the cone
+        vertices.push(0, height + yOffset, 0);
+        vertexColors.push(...color);
 
-    // Generate vertices around the base of the hat
-    for (let i = 0; i < hatSegments; i++) {
-        let angle = (i / hatSegments) * 2 * Math.PI;
-        let x = 0.5 * Math.cos(angle);
-        let z = 0.5 * Math.sin(angle);
-        hatVertices.push(x, 0.5, z);
-        hatColors.push(...hat);
+        // Base of the cone
+        for (let i = 0; i <= segments; i++) {
+            let angle = (i / segments) * angleSpan;
+            let x = radius * Math.cos(angle);
+            let z = radius * Math.sin(angle);
+            vertices.push(x, yOffset, z);
+            vertexColors.push(...color);
+        }
+
+        // Indices for the cone
+        for (let i = 1; i <= segments; i++) {
+            indices.push(0, i, i + 1);
+        }
+
+        return { vertices, indices, vertexColors };
     }
 
-    // Generate vertices for the brim of the hat
-    for (let i = 0; i < hatSegments; i++) {
-        let angle = (i / hatSegments) * 2 * Math.PI;
-        let x = 0.7 * Math.cos(angle);
-        let z = 0.7 * Math.sin(angle);
-        hatVertices.push(x, 0.5, z);
-        hatColors.push(...hat);
-    }
+    // Generate hat (cone with brim)
+    let hat = generateCone(0.11, 0.5, 32, hatColor, .5);
+    let brim = generateCone(0.2, 0.05, 32, hatColor, .5);
 
-    // Generate indices for the hat
-    for (let i = 1; i <= hatSegments; i++) {
-        let nextIndex = (i % hatSegments) + 1;
-        hatIndices.push(0, i, nextIndex);
-    }
+    // Generate head
+    let head = generateCone(0.1, -.5, 32, headColor, 0.5);
 
-    // Generate indices for the brim of the hat
-    for (let i = 1; i <= hatSegments; i++) {
-        let nextIndex = (i % hatSegments) + 1;
-        let brimIndex = i + hatSegments;
-        let nextBrimIndex = nextIndex + hatSegments;
-        hatIndices.push(i, brimIndex, nextIndex);
-        hatIndices.push(nextIndex, brimIndex, nextBrimIndex);
-    }
+    // Generate robe (cone)
+    let robe = generateCone(0.15, 1.0, 32, robeColor, -0.5);
+
+    // Generate collar (partial cone)
+    let collar = generateCone(0.15, -0.5, 32, robeColor, 0.5, 6 * Math.PI / 4);
+    
 
     let that = {
         vertices: [
-            ...hatVertices,
-
-            // Body (wizard robe)
-            -0.3, 0.5, -0.3, // Top base of the body
-            0.3, 0.5, -0.3,
-            0.3, 0.5, 0.3,
-            -0.3, 0.5, 0.3,
-            -0.5, -0.5, -0.5, // Bottom base of the body (wider for robe effect)
-            0.5, -0.5, -0.5,
-            0.5, -0.5, 0.5,
-            -0.5, -0.5, 0.5,
-
-            // Base (rectangle)
-            -0.5, -0.5, -0.5, // Bottom base of the model
-            0.5, -0.5, -0.5,
-            0.5, -0.5, 0.5,
-            -0.5, -0.5, 0.5
+            ...hat.vertices,
+            ...brim.vertices,
+            ...head.vertices,
+            ...robe.vertices,
+			...collar.vertices
         ],
-
-        // Indices for the wizard model
         indices: [
-            ...hatIndices,
-
-            // Body (wizard robe)
-            1 + hatSegments * 2, 2 + hatSegments * 2, 6 + hatSegments * 2,
-            1 + hatSegments * 2, 6 + hatSegments * 2, 5 + hatSegments * 2,
-            2 + hatSegments * 2, 3 + hatSegments * 2, 7 + hatSegments * 2,
-            2 + hatSegments * 2, 7 + hatSegments * 2, 6 + hatSegments * 2,
-            3 + hatSegments * 2, 4 + hatSegments * 2, 8 + hatSegments * 2,
-            3 + hatSegments * 2, 8 + hatSegments * 2, 7 + hatSegments * 2,
-            4 + hatSegments * 2, 1 + hatSegments * 2, 5 + hatSegments * 2,
-            4 + hatSegments * 2, 5 + hatSegments * 2, 8 + hatSegments * 2,
-
-            // Base (rectangle)
-            9 + hatSegments * 2, 10 + hatSegments * 2, 11 + hatSegments * 2,
-            9 + hatSegments * 2, 11 + hatSegments * 2, 12 + hatSegments * 2
+            ...hat.indices,
+            ...brim.indices.map(index => index + hat.vertices.length / 3),
+            ...head.indices.map(index => index + (hat.vertices.length + brim.vertices.length) / 3),
+            ...robe.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length) / 3),
+            ...collar.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length) / 3)
         ],
-
-        // Colors for the wizard model
         vertexColors: [
-            ...hatColors,
-
-            // Body (wizard robe)
-            ...body,
-            ...body,
-            ...body,
-            ...body,
-            ...body,
-            ...body,
-            ...body,
-            ...body,
-
-            // Base (rectangle)
-            ...base,
-            ...base,
-            ...base,
-            ...base
+            ...hat.vertexColors,
+            ...brim.vertexColors,
+            ...head.vertexColors,
+            ...robe.vertexColors,
+			...collar.vertexColors
         ],
-        // Bounding box for collision detection
-        boundingBox: {
-            minX: -0.5,
-            maxX: 0.5,
-            minY: -0.5,
-            maxY: 1.0,
-            minZ: -0.5,
-            maxZ: 0.5
-        },
-
-        // Update the bounding box when the model is translated or rotated
-        updateBoundingBox: function (dx, dy, dz) {
-            this.boundingBox.minX += dx;
-            this.boundingBox.maxX += dx;
-            this.boundingBox.minY += dy;
-            this.boundingBox.maxY += dy;
-            this.boundingBox.minZ += dz;
-            this.boundingBox.maxZ += dz;
-        },
-
-        // Check for collisions with another bounding box
-        checkCollision: function (otherBoundingBox) {
-            return !(this.boundingBox.maxX < otherBoundingBox.minX ||
-                this.boundingBox.minX > otherBoundingBox.maxX ||
-                this.boundingBox.maxY < otherBoundingBox.minY ||
-                this.boundingBox.minY > otherBoundingBox.maxY ||
-                this.boundingBox.maxZ < otherBoundingBox.minZ ||
-                this.boundingBox.minZ > otherBoundingBox.maxZ);
-        },
 
         // Stats for the player
         health: 100,
