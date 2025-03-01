@@ -144,6 +144,7 @@ myGame.player2 = (function () {
         health: 100,
         speed: 0.01,
         rotationSpeed: 0.01,
+        velocity: 0,
 
         // Hitbox for the player
         hitbox

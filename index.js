@@ -5,6 +5,7 @@ let model = myGame.player1;
 let model2 = myGame.player2;
 let fireSpell = myGame.fireSpell;
 let thunderSpell = myGame.thunderSpell;
+let gamepadIndex = null
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
@@ -127,7 +128,7 @@ function handleInputs(elapsedTime) {
         else if (input === 'Shift') {
             // Move Down
             translateModel(0, -model.speed, 0, model);
-        } 
+        }
         else if (input === 'ArrowLeft') {
             // Rotate Left around Z-axis
             rotateModel(0, 0, model.rotationSpeed, model);
@@ -152,8 +153,8 @@ function handleInputs(elapsedTime) {
             // Rotate Right around Y-axis
             rotateModel(0, -model.rotationSpeed, 0, model);
         }
-        
-        
+
+
         if (input === 'i') {
             // Move Forward
             translateModel(0, 0, model2.speed, model2);
@@ -171,6 +172,41 @@ function handleInputs(elapsedTime) {
             translateModel(model2.speed, 0, 0, model2);
         }
     }
+        // Handle gamepad inputs
+        if (gamepadIndex !== null) {
+            let gamepad = navigator.getGamepads()[gamepadIndex];
+            if (gamepad) {
+                // Left stick controls movement
+                let leftStickX = gamepad.axes[0];
+                let leftStickY = gamepad.axes[1];
+
+                if (Math.abs(leftStickX) > 0.1) {
+                    translateModel(leftStickX * model.speed, 0, 0, model);
+                }
+                if (Math.abs(leftStickY) > 0.1) {
+                    translateModel(0, 0, leftStickY * model.speed, model);
+                }
+
+                // Right stick controls rotation
+                let rightStickX = gamepad.axes[2];
+                let rightStickY = gamepad.axes[3];
+
+                if (Math.abs(rightStickX) > 0.1) {
+                    rotateModel(0, -rightStickX * model.rotationSpeed, 0, model);
+                }
+                if (Math.abs(rightStickY) > 0.1) {
+                    rotateModel(rightStickY * model.rotationSpeed, 0, 0, model);
+                }
+
+                // Jump
+                if (gamepad.buttons[0].pressed) {
+                    // Button A - Move Up
+                    translateModel(0, model.speed, 0, model);
+                    translateModel(0, -model.speed, 0, model);
+                }
+            }
+        }
+    
 }
 
 // Tracks hits and updates the game state
@@ -220,6 +256,27 @@ function initialize() {
     window.addEventListener('keyup', function(event) {
         delete inputBuffer[event.key];
     });
+    window.addEventListener("gamepadconnected", (e) => {
+        console.log(
+            "Gamepad connected at index %d: %s. %d buttons, %d axes.",
+            e.gamepad.index,
+            e.gamepad.id,
+            e.gamepad.buttons.length,
+            e.gamepad.axes.length,
+        );
+        gamepadIndex = e.gamepad.index
+    });
+    window.addEventListener("gamepaddisconnected", (e) => {
+        console.log(
+            "Gamepad disconnected from index %d: %s",
+            e.gamepad.index,
+            e.gamepad.id,
+        );
+        if (gamepadIndex === e.gamepad.index) {
+            gamepadIndex = null;
+        }
+    });
+
 
     myGame.render.core.resizeCanvas();
     window.addEventListener('resize', myGame.render.core.resizeCanvas);
