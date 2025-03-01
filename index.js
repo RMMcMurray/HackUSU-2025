@@ -1,5 +1,5 @@
 let canvas = document.getElementById('canvas');
-let ctx = canvas.getContext('webgl');
+let gl = canvas.getContext('webgl2');
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -22,7 +22,18 @@ function update() {
 }
 
 function render() {
-
+    triangle = {
+        vertices: [
+            -0.5, -0.5,
+            0.5, -0.5,
+            0.0, 0.5
+        ],
+        color: [
+            1.0, 0.0, 0.0,
+            0.0, 1.0, 0.0,
+            0.0, 0.0, 1.0
+        ]
+    }
 }
 
 function gameLoop() {
