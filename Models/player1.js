@@ -86,7 +86,7 @@ myGame.player1 = (function () {
         ],
 
         // Colors for the wizard model
-        colors: [
+        vertexColors: [
             // Hat (cone)
             ...hat, 
             ...hat,
