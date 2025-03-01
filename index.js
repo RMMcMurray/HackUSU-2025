@@ -4,25 +4,43 @@ let inputBuffer = {};
 
 // Get the coordinates of the vertex
 function translateTriangle(dx, dy, dz) {
-    let cost = Math.cos(angle);
-    let sint = Math.sin(angle);
 
     for (let i = 0; i < (myGame.triangle.vertices.length / 3); i++) {
-        x = myGame.triangle.vertices[(i * 3)]
-        y = myGame.triangle.vertices[(i * 3) + 1]
-        z = myGame.triangle.vertices[(i * 3) + 2]
-
-        x += dx;
-        y += dy;
-        z += dz;
-
-        myGame.triangle.vertices[(i * 3)] = x * cost - y * sint;
-        myGame.triangle.vertices[(i * 3) + 1] = x * sint + y * cost;
+        myGame.triangle.vertices[(i * 3)] += dx;
+        myGame.triangle.vertices[(i * 3) + 1] += dy;
+        myGame.triangle.vertices[(i * 3) + 2] += dz;
     }
 }
 
+// Rotate the triangle
+function rotateTriangle(angleX, angleY, angleZ) {
+    // Store old locations of the vertices
+    for (let i = 0; i < (myGame.triangle.vertices.length / 3); i++) {
+        let x = myGame.triangle.vertices[(i * 3)];
+        let myGame.triangle.vertices[(i * 3) + 1];
+        myGame.triangle.vertices[(i * 3) + 2];
+    }
 
-// Translate the triangle
+    // Defines rotation matrices
+    let xrotationMatrix = [
+        1, 0, 0,
+        0, Math.cos(angleX), -Math.sin(angleX),
+        0, Math.sin(angleX), Math.cos(angleX)
+    ];
+    let yrotationMatrix = [
+        Math.cos(angleY), 0, Math.sin(angleY),
+        0, 1, 0,
+        -Math.sin(angleY), 0, Math.cos(angleY)
+    ];
+    let zrotationMatrix = [
+        Math.cos(angleZ), -Math.sin(angleZ), 0,
+        Math.sin(angleZ), Math.cos(angleZ), 0,
+        0, 0, 1
+    ];
+}
+
+
+// Handles the inputs
 function handleInputs(elapsedTime) {
     // Controls Movement Speed
     let speed = 0.01;
@@ -67,6 +85,7 @@ function render(elapsedTime) {
 
 function gameLoop(time) {
     let elapsedTime = time - lastTimeStamp;
+    console.log(elapsedTime);
     lastTimeStamp = time;
 
     handleInputs(elapsedTime);
