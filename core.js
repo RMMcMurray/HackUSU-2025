@@ -14,7 +14,8 @@ myGame.render.core = (function () {
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
 
-    function renderTriangle() {
+    // Initializes the buffers for the triangle
+    function initilizeBuffersTriangle() {
         // Triangle Vertex Buffer
         let vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -34,6 +35,25 @@ myGame.render.core = (function () {
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
     };
 
+    // Initializes the shaders for the triangle
+    function initilizeShadersTriangle() {
+        // Vertex Shader
+        let vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, myGame.triangle.vertexShaderSource);
+        gl.compileShader(vertexShader);
+
+        // Fragment Shader
+        let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, myGame.triangle.fragmentShaderSource);
+        gl.compileShader(fragmentShader);
+
+        // Shader Program
+        let shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+    };
 
 
 
