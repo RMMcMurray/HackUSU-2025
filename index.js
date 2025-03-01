@@ -6,7 +6,8 @@ let model2 = myGame.player2;
 // let fireSpell = myGame.fireSpell;
 // let thunderSpell = myGame.thunderSpell;
 let ground = myGame.ground;
-let gamepadIndex = null
+let gamepadIndex1 = null;
+let gamepadIndex2 = null;
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
