@@ -214,7 +214,7 @@ function handleInputs(elapsedTime) {
     else {
         // Reset the model
         model.health += -10;
-        model.translateModel(-calculateCenter(model.vertices));
+        translateModel(-calculateCenter(model.vertices), model);
     }
     
 }
