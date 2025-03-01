@@ -1,6 +1,8 @@
 myGame.player1 = (function (input) {
     // Colors for the wizard model
-    purple = [0.5, 0, 0.5];
+    let hat = [0.5, 0, 0.5]; // Purple
+    let body = [0, 0, 1]; // Blue
+	let base = [0.5, 0.25, 0]; // Brown
 
 	let that = {
         vertices: [
@@ -54,27 +56,27 @@ myGame.player1 = (function (input) {
         // Colors for the wizard model
         colors: [
             // Hat (cone)
-            ...purple, // Purple
-            ...purple,
-            ...purple,
-            ...purple,
-            ...purple,
+            ...hat, 
+            ...hat,
+            ...hat,
+            ...hat,
+            ...hat,
 
             // Body (cylinder)
-            0, 0, 1, // Blue
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1,
+            ...body, 
+            ...body,
+            ...body,
+            ...body,
+            ...body,
+            ...body,
+            ...body,
+            ...body,
 
             // Base (rectangle)
-            0.5, 0.25, 0, // Brown
-            0.5, 0.25, 0,
-            0.5, 0.25, 0,
-            0.5, 0.25, 0
+            ...base,
+            ...base,
+            ...base,
+            ...base
         ],
         vertexShaderSource:
         `#version 300 es
