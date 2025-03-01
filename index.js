@@ -5,6 +5,7 @@ let model = myGame.player1;
 let model2 = myGame.player2;
 let fireSpell = myGame.fireSpell;
 let thunderSpell = myGame.thunderSpell;
+let ground = myGame.ground;
 let gamepadIndex = null
 
 // Translate the model
@@ -233,6 +234,7 @@ function update(elapsedTime) {
 
 function render(elapsedTime) {
     myGame.render.core.clearBackground();
+    myGame.render.core.drawModel(ground);
     myGame.render.core.drawModel(model);
     myGame.render.core.drawModel(model2);
     myGame.render.core.drawModel(fireSpell);
