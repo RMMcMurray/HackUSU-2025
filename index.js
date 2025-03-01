@@ -1,7 +1,13 @@
 let lastTimeStamp = performance.now();
 
-function handleInputs(elapsedTime) {
+let inputBuffer = {};
 
+function handleInputs(elapsedTime) {
+    for (let input in inputBuffer) {
+        if (input === 'w') {
+            // Move Left
+        }
+    }
 }
 
 // Translate the triangle
@@ -37,7 +43,18 @@ function gameLoop(time) {
     requestAnimationFrame(gameLoop);
 }
 
-myGame.render.core.resizeCanvas();
-window.addEventListener('resize', myGame.render.core.resizeCanvas);
+function initialize() {
+    window.addEventListener('keydown', function(event) {
+        inputBuffer[event.key] = event.timeStamp;
+    });
+    window.addEventListener('keyup', function(event) {
+        delete inputBuffer[event.key];
+    });
 
-requestAnimationFrame(gameLoop);
+    myGame.render.core.resizeCanvas();
+    window.addEventListener('resize', myGame.render.core.resizeCanvas);
+
+    requestAnimationFrame(gameLoop);
+}
+
+initialize();
