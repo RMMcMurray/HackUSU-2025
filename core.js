@@ -107,9 +107,6 @@ myGame.render.core = (function () {
         gl.drawElements(gl.TRIANGLES, myGame.triangle.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 
-
-
-
     return {
         clearBackground: clearBackground,
         resizeCanvas: resizeCanvas,
