@@ -44,7 +44,14 @@ myGame.player1 = (function () {
 
     // Generate collar (partial cone)
     let collar = generateCone(0.15, -0.5, 32, robeColor, 0.5, 6 * Math.PI / 4);
-    
+
+    // Generate arms (two small cones)
+    let leftArm = generateCone(0.05, 0.3, 32, robeColor, 0);
+    let rightArm = generateCone(0.05, 0.3, 32, robeColor, 0);
+
+    // Offset the arms to the sides
+    leftArm.vertices = leftArm.vertices.map((v, i) => i % 3 === 0 ? v - 0.2 : v); // Move left arm to the left
+    rightArm.vertices = rightArm.vertices.map((v, i) => i % 3 === 0 ? v + 0.2 : v); // Move right arm to the right
 
     let that = {
         vertices: [
@@ -52,21 +59,27 @@ myGame.player1 = (function () {
             ...brim.vertices,
             ...head.vertices,
             ...robe.vertices,
-			...collar.vertices
+            ...collar.vertices,
+            ...leftArm.vertices,
+            ...rightArm.vertices
         ],
         indices: [
             ...hat.indices,
             ...brim.indices.map(index => index + hat.vertices.length / 3),
             ...head.indices.map(index => index + (hat.vertices.length + brim.vertices.length) / 3),
             ...robe.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length) / 3),
-            ...collar.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length) / 3)
+            ...collar.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length) / 3),
+            ...leftArm.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length + collar.vertices.length) / 3),
+            ...rightArm.indices.map(index => index + (hat.vertices.length + brim.vertices.length + head.vertices.length + robe.vertices.length + collar.vertices.length + leftArm.vertices.length) / 3)
         ],
         vertexColors: [
             ...hat.vertexColors,
             ...brim.vertexColors,
             ...head.vertexColors,
             ...robe.vertexColors,
-			...collar.vertexColors
+            ...collar.vertexColors,
+            ...leftArm.vertexColors,
+            ...rightArm.vertexColors
         ],
 
         // Stats for the player
