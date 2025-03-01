@@ -41,7 +41,7 @@ myGame.thunderSpell = (function () {
         // Stats for the magic spell
         health: 10,
         speed: 0.05,
-        rotationSpeed: 0.01
+        rotationSpeed: 0.01,
     };
 
     return that;

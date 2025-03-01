@@ -2,6 +2,12 @@ let lastTimeStamp = performance.now();
 
 let inputBuffer = {};
 let model = myGame.player1;
+<<<<<<< Updated upstream
+=======
+let model2 = myGame.player2;
+let fireSpell = myGame.fireSpell;
+let thunderSpell = myGame.thunderSpell;
+>>>>>>> Stashed changes
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
@@ -149,6 +155,24 @@ function handleInputs(elapsedTime) {
             // Rotate Right around Y-axis
             rotateModel(0, -model.rotationSpeed, 0, model);
         }
+        
+        
+        if (input === 'i') {
+            // Move Forward
+            translateModel(0, 0, model2.speed, model2);
+        }
+        else if (input === 'j') {
+            // Move Left
+            translateModel(-model2.speed, 0, 0, model2);
+        }
+        else if (input === 'k') {
+            // Move Backward
+            translateModel(0, 0, -model2.speed, model2);
+        }
+        else if (input === 'l') {
+            // Move Right
+            translateModel(model2.speed, 0, 0, model2);
+        }
     }
 }
 
@@ -177,6 +201,9 @@ function update(elapsedTime) {
 function render(elapsedTime) {
     myGame.render.core.clearBackground();
     myGame.render.core.drawModel(model);
+    myGame.render.core.drawModel(model2);
+    myGame.render.core.drawModel(fireSpell);
+    myGame.render.core.drawModel(thunderSpell);
 }
 
 function gameLoop(time) {
@@ -201,6 +228,9 @@ function initialize() {
     window.addEventListener('resize', myGame.render.core.resizeCanvas);
 
     myGame.render.core.initializeModel(model);
+    myGame.render.core.initializeModel(model2);
+    myGame.render.core.initializeModel(fireSpell);
+    myGame.render.core.initializeModel(thunderSpell);
 
     requestAnimationFrame(gameLoop);
 }
