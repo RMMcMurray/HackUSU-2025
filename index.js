@@ -12,6 +12,7 @@ function handleInputs(elapsedTime) {
 
 // Translate the triangle
 function translateTriangle() {
+    // Get the coordinates of the vertex
     for (let i = 0; i < (myGame.triangle.vertices.length / 3); i++) {
         let x = myGame.triangle.vertices[(i * 3)];
         let y = myGame.triangle.vertices[(i * 3) + 1];
