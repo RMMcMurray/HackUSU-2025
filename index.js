@@ -202,10 +202,14 @@ function handleInputs(elapsedTime) {
                     rotateModel(rightStickY * model.rotationSpeed, 0, 0, model);
                 }
 
-                // Jump
+                // up
                 if (gamepad.buttons[0].pressed) {
                     // Button A - Move Up
                     translateModel(0, model.speed, 0, model);
+                }
+
+                // down
+                if (gamepad.buttons[1].pressed) {
                     translateModel(0, -model.speed, 0, model);
                 }
             }
