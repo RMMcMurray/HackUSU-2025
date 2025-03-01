@@ -73,26 +73,26 @@ myGame.render.core = (function () {
     }
 
     // Associates the buffers with the shaders
-    let associateBuffersWithShaderProgram = function (buffers, shaderProgram) {
+    let associateBufferWithAttribute = function (buffer, attribute) {
         // Creates buffer the coordinates attribute
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
-        gl.vertexAttribPointer(shaderProgram.attributeLocations.position, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(shaderProgram.attributeLocations.position);
-
-        // Creates buffer the color attribute
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.colorBuffer);
-        gl.vertexAttribPointer(shaderProgram.attributeLocations.color, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(shaderProgram.attributeLocations.color);
-
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.vertexAttribPointer(attribute, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(attribute);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
     };
+
+    function initializeModel(model) {
+        model.buffers = initializeBuffers(model);
+        associateBufferWithAttribute(model.buffers.vertexBuffer, myGame.render.shaderProgram.attributeLocations.position);
+        associateBufferWithAttribute(model.buffers.colorBuffer, myGame.render.shaderProgram.attributeLocations.color);
+    }
 
     // Draws the triangle
     function drawModel(model) {
-        let buffers = initializeBuffers(model);
-        associateBuffersWithShaderProgram(buffers, myGame.render.shaderProgram);
-        clearBackground();
+        initializeModel(model);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.buffers.indexBuffer);
         gl.drawElements(gl.TRIANGLES, model.indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
     return {
@@ -101,6 +101,7 @@ myGame.render.core = (function () {
         getUniformLocation: getUniformLocation,
         clearBackground: clearBackground,
         resizeCanvas: resizeCanvas,
+        initializeModel: initializeModel,
         drawModel: drawModel,
     };
 }());

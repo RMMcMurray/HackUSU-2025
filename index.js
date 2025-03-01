@@ -182,6 +182,8 @@ function initialize() {
     myGame.render.core.resizeCanvas();
     window.addEventListener('resize', myGame.render.core.resizeCanvas);
 
+    myGame.render.core.initializeModel(model);
+
     requestAnimationFrame(gameLoop);
 }
 
