@@ -258,6 +258,10 @@ function handleInputs(elapsedTime) {
                 if (gamepad2.buttons[1].pressed) {
                     translateModel(0, -model2.speed, 0, model2);
                 }
+
+                if (gamepad2.buttons[2].pressed) {
+                    renderThunderSpell = true;
+                }
             }
         }
     // }
