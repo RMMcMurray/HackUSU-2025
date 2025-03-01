@@ -1,4 +1,4 @@
-myGame.triangle = (function (input) {
+myGame.triangle = (function () {
     //points of the triangle
     let vertex1 = [0, 0, -0.5];
     let vertex2 = [0.5, 0.5, 0.5];
@@ -53,4 +53,4 @@ myGame.triangle = (function (input) {
     };
     
     return that;
-}(myGame.triangle.input));
+}());

@@ -1,4 +1,4 @@
-myGame.player2 = (function (input) {
+myGame.player2 = (function () {
     // Colors for the wizard model
     let hat = [0.5, 0, 0]; // Red
     let body = [.8, .2, 0]; // Orange
@@ -78,28 +78,7 @@ myGame.player2 = (function (input) {
             ...base,
             ...base
         ],
-        vertexShaderSource:
-            `#version 300 es
-        in vec3 aCoordinates;
-        in vec3 aColor;
-        out vec3 vColor;
-
-        void main() {
-            gl_Position = vec4(aCoordinates, 1.0);
-            vColor = aColor;
-        }
-        `,
-        fragmentShaderSource:
-            `#version 300 es
-        precision mediump float;
-        in vec3 vColor;
-        out vec4 outColor;
-
-        void main() {
-            outColor = vec4(vColor, 1.0);
-        }
-        `
     };
 
     return that;
-}(myGame.player2.input));
+}());
