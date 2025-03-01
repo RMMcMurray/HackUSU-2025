@@ -13,7 +13,28 @@ myGame.triangle = (function (input) {
             1, 0, 0,
             0, 1, 0,
             0, 0, 1
-        ]
+        ],
+        vertexShaderSource: `
+        #version 300 es
+        in vec3 aCoordinates;
+        in vec3 aColor;
+        out vec3 vColor;
+
+        void main() {
+            gl_Position = vec4(aCoordinates, 1.0);
+            vColor = aColor;
+        }
+        `,
+        fragmentShaderSource: `
+        #version 300 es
+        precision mediump float;
+        in vec3 vColor;
+        out vec4 outColor;
+
+        void main() {
+            gl_FragColor = vec4(vColor, 1.0);
+        }
+        `
 
 
     };
