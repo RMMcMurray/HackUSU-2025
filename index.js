@@ -1,7 +1,7 @@
 let lastTimeStamp = performance.now();
 
 let inputBuffer = {};
-let model = myGame.player1;
+let model = myGame.thunderSpell;
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
@@ -154,21 +154,20 @@ function handleInputs(elapsedTime) {
 
 // Tracks hits and updates the game state
 function trackHits() {
-    // Check if the player is hit by a fireball
-    for (let i = 0; i < myGame.fireballs.length; i++) {
-        let fireball = myGame.fireballs[i];
-        let player1 = myGame.player1;
-        // Check if the fireball is within the player's hitbox
-        if (fireball.position[0] > player.hitbox.minX && fireball.position[0] < player.hitbox.maxX &&
-            fireball.position[1] > player.hitbox.minY && fireball.position[1] < player.hitbox.maxY &&
-            fireball.position[2] > player.hitbox.minZ && fireball.position[2] < player.hitbox.maxZ) {
-            // Decrease the player's health
-            player.health -= 10;
-            // Remove the fireball
-            myGame.fireballs.splice(i, 1);
-            i--;
-        }
+    // Check if the player1 is hit by a fireSpell
+    if (myGame.collision.checkCollision(myGame.player1, myGame.fireSpell)) {
+        myGame.player1.health -= myGame.fireSpell.health;
     }
+    // Check if the player2 is hit by a thunderSpell
+    if (myGame.collision.checkCollision(myGame.player2, myGame.thunderSpell)) {
+        myGame.player2.health -= myGame.fireSpell.health;
+    }     
+    // Check if the fireSpell is hit by a thunderSpell
+    if (myGame.collision.checkCollision(myGame.fireSpell, myGame.thunderSpell)) {
+        myGame.fireSpell.health = 0;
+        myGame.thunderSpell.health = 0;
+    }
+   
 }
 
 function update(elapsedTime) {

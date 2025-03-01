@@ -1,9 +1,9 @@
-myGame.fireSpell = (function () {
+myGame.thunderSpell = (function () {
 
-    // Colors for the fire
+    // Colors for the lightining
     let yellow = [1, 1, 0];
-    let red = [1, 0, 0];
-    let orange = [.8, .2, 0];
+    let white = [1, 1, .8];
+    let black = [.2, .2, 0];
 
     // Top Vertexes
     let v0 = [.05, 0.025, 0.05];
@@ -31,8 +31,8 @@ myGame.fireSpell = (function () {
             3, 0, 4, 3, 4, 7  // Left face
         ],
         vertexColors: [
-            ...red, ...yellow, ...orange, ...red, // Top face colors
-            ...yellow, ...orange, ...red, ...yellow // Bottom face colors
+            ...black, ...yellow, ...white, ...black, // Top face colors
+            ...yellow, ...white, ...black, ...yellow // Bottom face colors
         ],
         hitbox: {
             min: [-0.05, -0.025, -0.05],
