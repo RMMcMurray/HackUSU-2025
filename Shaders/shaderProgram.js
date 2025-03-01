@@ -5,8 +5,11 @@ myGame.render.shaderProgram = (function(core){
         in vec3 aColor;
         out vec3 vColor;
 
+        uniform mat4 uProjectionMatrix;
+        uniform mat4 uCameraPositionMatrix;
+
         void main() {
-            gl_Position = vec4(aCoordinates, 1.0);
+            gl_Position = uProjectionMatrix * uCameraPositionMatrix * vec4(aCoordinates, 1.0);
             vColor = aColor;
         }
         `;
@@ -32,7 +35,10 @@ myGame.render.shaderProgram = (function(core){
         position: core.getAttributeLocation(that.program, 'aCoordinates'),
         color: core.getAttributeLocation(that.program, 'aColor'),
     };
-    that.uniformLocations = {};
+    that.uniformLocations = {
+        projectionMatrix: core.getUniformLocation(that.program, 'uProjectionMatrix'),
+        cameraPositionMatrix: core.getUniformLocation(that.program, 'uCameraPositionMatrix'),
+    };
 
     return that;
 }(myGame.render.core));

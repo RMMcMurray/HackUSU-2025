@@ -80,19 +80,29 @@ myGame.render.core = (function () {
         gl.enableVertexAttribArray(attribute);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
     };
+    
+    function setUniform4fv(matrix, uniformLocation) {
+        gl.uniformMatrix4fv(uniformLocation, false, matrix);
+    };
 
-    function initializeModel(model) {
-        model.buffers = initializeBuffers(model);
+    function initializeModel(model, camera) {
+        model.buffers = initializeBuffers(model, camera);
         associateBufferWithAttribute(model.buffers.vertexBuffer, myGame.render.shaderProgram.attributeLocations.position);
         associateBufferWithAttribute(model.buffers.colorBuffer, myGame.render.shaderProgram.attributeLocations.color);
+        setUniform4fv(camera.perspectiveMatrix, myGame.render.shaderProgram.uniformLocations.projectionMatrix);
+        setUniform4fv(camera.positionMatrix, myGame.render.shaderProgram.uniformLocations.cameraPositionMatrix);
     }
 
     // Draws the triangle
-    function drawModel(model) {
-        initializeModel(model);
+    function drawModel(model, camera) {
+        initializeModel(model, camera);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.buffers.indexBuffer);
         gl.drawElements(gl.TRIANGLES, model.indices.length, gl.UNSIGNED_SHORT, 0);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+    }
+
+    function getAspectRatio() {
+        return canvas.width / canvas.height;
     }
 
     return {
@@ -103,5 +113,6 @@ myGame.render.core = (function () {
         resizeCanvas: resizeCanvas,
         initializeModel: initializeModel,
         drawModel: drawModel,
+        getAspectRatio: getAspectRatio,
     };
 }());
