@@ -16,8 +16,8 @@ function translateTriangle(dx, dy, dz) {
 function rotateTriangle(angleX, angleY, angleZ) {
     // Store old locations of the vertices
     for (let i = 0; i < (myGame.triangle.vertices.length / 3); i++) {
-        let x = myGame.triangle.vertices[(i * 3)];
-        let myGame.triangle.vertices[(i * 3) + 1];
+        myGame.triangle.vertices[(i * 3)];
+        myGame.triangle.vertices[(i * 3) + 1];
         myGame.triangle.vertices[(i * 3) + 2];
     }
 
