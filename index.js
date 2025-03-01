@@ -12,8 +12,29 @@ function translateTriangle(dx, dy, dz) {
     }
 }
 
+// Calculate the center of the object
+function calculateCenter(vertices) {
+    let centerX = 0, centerY = 0, centerZ = 0;
+    let numVertices = vertices.length / 3;
+
+    for (let i = 0; i < numVertices; i++) {
+        centerX += vertices[i * 3];
+        centerY += vertices[i * 3 + 1];
+        centerZ += vertices[i * 3 + 2];
+    }
+
+    return {
+        x: centerX / numVertices,
+        y: centerY / numVertices,
+        z: centerZ / numVertices
+    };
+}
+
 // Rotate the triangle
 function rotateTriangle(angleX, angleY, angleZ) {
+    // Calculate the center of the object
+    let center = calculateCenter(myGame.triangle.vertices);
+
     // Store old locations of the vertices
     let vertices = [];
     for (let i = 0; i < (myGame.triangle.vertices.length / 3); i++) {
@@ -45,12 +66,10 @@ function rotateTriangle(angleX, angleY, angleZ) {
     for (let i = 0; i < vertices.length; i++) {
         let vertex = vertices[i];
 
-        // Stores Values
-        let x = vertex[0];
-        let y = vertex[1];
-        let z = vertex[2];
-        
         // Translate to origin
+        let x = vertex[0] - center.x;
+        let y = vertex[1] - center.y;
+        let z = vertex[2] - center.z;
 
         // Apply X rotation
         let newY = y * xrotationMatrix[4] + z * xrotationMatrix[5];
@@ -71,9 +90,9 @@ function rotateTriangle(angleX, angleY, angleZ) {
         y = newY;
 
         // Translate back to original position
-        myGame.triangle.vertices[(i * 3)] = x;
-        myGame.triangle.vertices[(i * 3) + 1] = y;
-        myGame.triangle.vertices[(i * 3) + 2] = z;
+        myGame.triangle.vertices[(i * 3)] = x + center.x;
+        myGame.triangle.vertices[(i * 3) + 1] = y + center.y;
+        myGame.triangle.vertices[(i * 3) + 2] = z + center.z;
     }
 }
 
