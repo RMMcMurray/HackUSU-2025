@@ -1,9 +1,9 @@
 myGame.player1 = (function () {
     // Colors for the wizard model
-    let hatColor = [0.7, 0, .9]; // Dark Purple
-	let brimColor = [0.9, 0, 1]; // Purple
-	let robeColor = [.05, .0, .8]; // Blue
-    let collarColor = [.02, .1, .6]; // Darker Blue
+    let collarColor = [0.4, 0, .6]; // Dark Purple
+	let robeColor = [0.6, 0.1, 8]; // Purple
+	let brimColor = [.05, .2, .8]; // Blue
+    let hatColor = [.02, .2, .6]; // Darker Blue
     let headColor = [0, 0, 0]; // Black
 
     // Function to generate vertices and indices for a cone

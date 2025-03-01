@@ -1,7 +1,7 @@
 let lastTimeStamp = performance.now();
 
 let inputBuffer = {};
-let model = myGame.thunderSpell;
+let model = myGame.player1;
 
 // Translate the model
 function translateModel(dx, dy, dz, model) {
