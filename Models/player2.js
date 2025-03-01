@@ -1,7 +1,9 @@
 myGame.player2 = (function () {
     // Colors for the wizard model
-    let hatColor = [0.5, 0, 0]; // Red
+    let hatColor = [0.3, 0, 0]; // Red
+    let brimColor = [0.5, 0, 0]; // Darker Red
     let robeColor = [.8, .2, 0]; // Orange
+    let collarColor = [.7, .1, 0]; // Darker Yellow
     let headColor = [0, 0, 0]; // Black
 
     // Function to generate vertices and indices for a cone
@@ -32,8 +34,8 @@ myGame.player2 = (function () {
     }
 
     // Generate hat (cone with brim)
-    let hat = generateCone(0.11, 0.5, 32, hatColor, .5);
-    let brim = generateCone(0.2, 0.05, 32, hatColor, .5);
+    let hat = generateCone(0.11, 0.5, 32, hatColor, .525);
+    let brim = generateCone(0.2, 0.05, 32, brimColor, .5);
 
     // Generate head
     let head = generateCone(0.1, -.5, 32, headColor, 0.5);
@@ -42,7 +44,7 @@ myGame.player2 = (function () {
     let robe = generateCone(0.15, 1.0, 32, robeColor, -0.5);
 
     // Generate collar (partial cone)
-    let collar = generateCone(0.15, -0.5, 32, robeColor, 0.5, 6 * Math.PI / 4);
+    let collar = generateCone(0.15, -0.5, 32, collarColor, 0.5, 6 * Math.PI / 4);
 
     // Combine all vertices
     let allVertices = [

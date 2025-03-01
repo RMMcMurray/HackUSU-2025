@@ -152,6 +152,25 @@ function handleInputs(elapsedTime) {
     }
 }
 
+// Tracks hits and updates the game state
+function trackHits() {
+    // Check if the player is hit by a fireball
+    for (let i = 0; i < myGame.fireballs.length; i++) {
+        let fireball = myGame.fireballs[i];
+        let player1 = myGame.player1;
+        // Check if the fireball is within the player's hitbox
+        if (fireball.position[0] > player.hitbox.minX && fireball.position[0] < player.hitbox.maxX &&
+            fireball.position[1] > player.hitbox.minY && fireball.position[1] < player.hitbox.maxY &&
+            fireball.position[2] > player.hitbox.minZ && fireball.position[2] < player.hitbox.maxZ) {
+            // Decrease the player's health
+            player.health -= 10;
+            // Remove the fireball
+            myGame.fireballs.splice(i, 1);
+            i--;
+        }
+    }
+}
+
 function update(elapsedTime) {
 
 }
