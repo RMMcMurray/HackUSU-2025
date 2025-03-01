@@ -104,9 +104,9 @@ function rotateModel(angleX, angleY, angleZ, model) {
 
 // Handles the inputs
 function handleInputs(elapsedTime) {
-    if (((-.95 < calculateCenter(model.vertices).x) && (calculateCenter(model.vertices).x < .95)) &&
-        ((-.95 < calculateCenter(model.vertices).y) && (calculateCenter(model.vertices) < .95)) &&
-        ((-.95 < calculateCenter(model.vertices).z) && (calculateCenter(model.vertices).z < .95))) {
+    // if (((-.95 < calculateCenter(model.vertices).x) && (calculateCenter(model.vertices).x < .95)) &&
+    //     ((-.95 < calculateCenter(model.vertices).y) && (calculateCenter(model.vertices) < .95)) &&
+    //     ((-.95 < calculateCenter(model.vertices).z) && (calculateCenter(model.vertices).z < .95))) {
         // Conditional to detect key presses
         for (let input in inputBuffer) {
             if (input === 'w') {
@@ -188,7 +188,7 @@ function handleInputs(elapsedTime) {
                     translateModel(leftStickX * model.speed, 0, 0, model);
                 }
                 if (Math.abs(leftStickY) > 0.1) {
-                    translateModel(0, 0, leftStickY * model.speed, model);
+                    translateModel(0, 0, -leftStickY * model.speed, model);
                 }
 
                 // Right stick controls rotation
@@ -214,12 +214,13 @@ function handleInputs(elapsedTime) {
                 }
             }
         }
-    }
-    else {
-        // Reset the model
-        model.health += -10;
-        translateModel(-calculateCenter(model.vertices), model);
-    }
+    // }
+    // else {
+    //     // Reset the model
+    //     model.health += -10;
+    //     let center = calculateCenter(model.vertices);
+    //     translateModel(-center.x, -center.y, -center.z, model);
+    // }
     
 }
 

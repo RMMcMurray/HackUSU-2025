@@ -122,7 +122,7 @@ myGame.player2 = (function () {
     };
 
     let that = {
-        vertices: allVertices,
+        vertices: allVertices.map(element => element * .05),
         indices: [
             ...hat.indices,
             ...brim.indices.map(index => index + hat.vertices.length / 3),
