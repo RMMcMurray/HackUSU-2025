@@ -51,6 +51,7 @@ myGame.triangle = (function () {
             
         ],
     };
-    
+    let speed = 0.01;
+    let rotationSpeed = 0.01;
     return that;
 }());

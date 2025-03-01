@@ -107,7 +107,41 @@ myGame.player1 = (function () {
             ...base,
             ...base
         ],
+        // Bounding box for collision detection
+        boundingBox: {
+            minX: -0.5,
+            maxX: 0.5,
+            minY: -0.5,
+            maxY: 1.0,
+            minZ: -0.5,
+            maxZ: 0.5
+        },
+
+        // Update the bounding box when the model is translated or rotated
+        updateBoundingBox: function (dx, dy, dz) {
+            this.boundingBox.minX += dx;
+            this.boundingBox.maxX += dx;
+            this.boundingBox.minY += dy;
+            this.boundingBox.maxY += dy;
+            this.boundingBox.minZ += dz;
+            this.boundingBox.maxZ += dz;
+        },
+
+        // Check for collisions with another bounding box
+        checkCollision: function (otherBoundingBox) {
+            return !(this.boundingBox.maxX < otherBoundingBox.minX ||
+                this.boundingBox.minX > otherBoundingBox.maxX ||
+                this.boundingBox.maxY < otherBoundingBox.minY ||
+                this.boundingBox.minY > otherBoundingBox.maxY ||
+                this.boundingBox.maxZ < otherBoundingBox.minZ ||
+                this.boundingBox.minZ > otherBoundingBox.maxZ);
+        },
+
+        // Stats for the player
+        health: 100,
+        speed: 0.01,
+        rotationSpeed: 0.01
     };
-    
+
     return that;
 }());

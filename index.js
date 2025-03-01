@@ -99,59 +99,55 @@ function rotateModel(angleX, angleY, angleZ, model) {
 
 // Handles the inputs
 function handleInputs(elapsedTime) {
-    // Controls Movement Speed
-    let speed = 0.01;
-    let rotationSpeed = 0.05;
-
     // Conditional to detect key presses
     for (let input in inputBuffer) {
         if (input === 'w') {
             // Move Forward
-            translateModel(0, 0, speed, model);
+            translateModel(0, 0, model.speed, model);
         }
         else if (input === 'a') {
             // Move Left
-            translateModel(-speed, 0, 0, model);
+            translateModel(-model.speed, 0, 0, model);
         }
         else if (input === 's') {
             // Move Backward
-            translateModel(0, 0, -speed, model);
+            translateModel(0, 0, -model.speed, model);
         }
         else if (input === 'd') {
             // Move Right
-            translateModel(speed, 0, 0, model);
+            translateModel(model.speed, 0, 0, model);
         }
         else if (input === ' ') {
             // Move Up
-            translateModel(0, speed, 0, model);
+            translateModel(0, model.speed, 0, model);
         }
         else if (input === 'Shift') {
             // Move Down
-            translateModel(0, -speed, 0, model);
+            translateModel(0, -model.speed, 0, model);
         } 
         else if (input === 'ArrowLeft') {
             // Rotate Left around Z-axis
-            rotateModel(0, 0, rotationSpeed, model);
+            rotateModel(0, 0, model.rotationSpeed, model);
         }
         else if (input === 'ArrowRight') {
             // Rotate Right around Z-axis
-            rotateModel(0, 0, -rotationSpeed, model);
+            rotateModel(0, 0, -model.rotationSpeed, model);
         }
         else if (input === 'ArrowUp') {
             // Rotate Up around X-axis
-            rotateModel(rotationSpeed, 0, 0, model);
+            rotateModel(model.rotationSpeed, 0, 0, model);
         }
         else if (input === 'ArrowDown') {
             // Rotate Down around X-axis
-            rotateModel(-rotationSpeed, 0, 0, model);
+            rotateModel(-model.rotationSpeed, 0, 0, model);
         }
         else if (input === 'q') {
             // Rotate Left around Y-axis
-            rotateModel(0, rotationSpeed, 0, model);
+            rotateModel(0, model.rotationSpeed, 0, model);
         }
         else if (input === 'e') {
             // Rotate Right around Y-axis
-            rotateModel(0, -rotationSpeed, 0, model);
+            rotateModel(0, -model.rotationSpeed, 0, model);
         }
     }
 }
